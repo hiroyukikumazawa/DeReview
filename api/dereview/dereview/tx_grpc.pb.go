@@ -24,6 +24,7 @@ const (
 	Msg_UpdatePost_FullMethodName   = "/dereview.dereview.Msg/UpdatePost"
 	Msg_DeletePost_FullMethodName   = "/dereview.dereview.Msg/DeletePost"
 	Msg_CreatePost1_FullMethodName  = "/dereview.dereview.Msg/CreatePost1"
+	Msg_UpdatePost1_FullMethodName  = "/dereview.dereview.Msg/UpdatePost1"
 )
 
 // MsgClient is the client API for Msg service.
@@ -37,6 +38,7 @@ type MsgClient interface {
 	UpdatePost(ctx context.Context, in *MsgUpdatePost, opts ...grpc.CallOption) (*MsgUpdatePostResponse, error)
 	DeletePost(ctx context.Context, in *MsgDeletePost, opts ...grpc.CallOption) (*MsgDeletePostResponse, error)
 	CreatePost1(ctx context.Context, in *MsgCreatePost1, opts ...grpc.CallOption) (*MsgCreatePost1Response, error)
+	UpdatePost1(ctx context.Context, in *MsgUpdatePost1, opts ...grpc.CallOption) (*MsgUpdatePost1Response, error)
 }
 
 type msgClient struct {
@@ -92,6 +94,15 @@ func (c *msgClient) CreatePost1(ctx context.Context, in *MsgCreatePost1, opts ..
 	return out, nil
 }
 
+func (c *msgClient) UpdatePost1(ctx context.Context, in *MsgUpdatePost1, opts ...grpc.CallOption) (*MsgUpdatePost1Response, error) {
+	out := new(MsgUpdatePost1Response)
+	err := c.cc.Invoke(ctx, Msg_UpdatePost1_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -103,6 +114,7 @@ type MsgServer interface {
 	UpdatePost(context.Context, *MsgUpdatePost) (*MsgUpdatePostResponse, error)
 	DeletePost(context.Context, *MsgDeletePost) (*MsgDeletePostResponse, error)
 	CreatePost1(context.Context, *MsgCreatePost1) (*MsgCreatePost1Response, error)
+	UpdatePost1(context.Context, *MsgUpdatePost1) (*MsgUpdatePost1Response, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -124,6 +136,9 @@ func (UnimplementedMsgServer) DeletePost(context.Context, *MsgDeletePost) (*MsgD
 }
 func (UnimplementedMsgServer) CreatePost1(context.Context, *MsgCreatePost1) (*MsgCreatePost1Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePost1 not implemented")
+}
+func (UnimplementedMsgServer) UpdatePost1(context.Context, *MsgUpdatePost1) (*MsgUpdatePost1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePost1 not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -228,6 +243,24 @@ func _Msg_CreatePost1_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_UpdatePost1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdatePost1)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdatePost1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UpdatePost1_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdatePost1(ctx, req.(*MsgUpdatePost1))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -254,6 +287,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreatePost1",
 			Handler:    _Msg_CreatePost1_Handler,
+		},
+		{
+			MethodName: "UpdatePost1",
+			Handler:    _Msg_UpdatePost1_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
