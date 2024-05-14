@@ -24,6 +24,7 @@ const (
 	Query_GetPost_FullMethodName       = "/dereview.dereview.Query/GetPost"
 	Query_ListPost_FullMethodName      = "/dereview.dereview.Query/ListPost"
 	Query_ShowPost1_FullMethodName     = "/dereview.dereview.Query/ShowPost1"
+	Query_ListPost1_FullMethodName     = "/dereview.dereview.Query/ListPost1"
 )
 
 // QueryClient is the client API for Query service.
@@ -39,6 +40,8 @@ type QueryClient interface {
 	ListPost(ctx context.Context, in *QueryAllPostRequest, opts ...grpc.CallOption) (*QueryAllPostResponse, error)
 	// Queries a list of ShowPost1 items.
 	ShowPost1(ctx context.Context, in *QueryShowPost1Request, opts ...grpc.CallOption) (*QueryShowPost1Response, error)
+	// Queries a list of ListPost1 items.
+	ListPost1(ctx context.Context, in *QueryListPost1Request, opts ...grpc.CallOption) (*QueryListPost1Response, error)
 }
 
 type queryClient struct {
@@ -94,6 +97,15 @@ func (c *queryClient) ShowPost1(ctx context.Context, in *QueryShowPost1Request, 
 	return out, nil
 }
 
+func (c *queryClient) ListPost1(ctx context.Context, in *QueryListPost1Request, opts ...grpc.CallOption) (*QueryListPost1Response, error) {
+	out := new(QueryListPost1Response)
+	err := c.cc.Invoke(ctx, Query_ListPost1_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -107,6 +119,8 @@ type QueryServer interface {
 	ListPost(context.Context, *QueryAllPostRequest) (*QueryAllPostResponse, error)
 	// Queries a list of ShowPost1 items.
 	ShowPost1(context.Context, *QueryShowPost1Request) (*QueryShowPost1Response, error)
+	// Queries a list of ListPost1 items.
+	ListPost1(context.Context, *QueryListPost1Request) (*QueryListPost1Response, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -128,6 +142,9 @@ func (UnimplementedQueryServer) ListPost(context.Context, *QueryAllPostRequest) 
 }
 func (UnimplementedQueryServer) ShowPost1(context.Context, *QueryShowPost1Request) (*QueryShowPost1Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ShowPost1 not implemented")
+}
+func (UnimplementedQueryServer) ListPost1(context.Context, *QueryListPost1Request) (*QueryListPost1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPost1 not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -232,6 +249,24 @@ func _Query_ShowPost1_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ListPost1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryListPost1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListPost1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ListPost1_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListPost1(ctx, req.(*QueryListPost1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -258,6 +293,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ShowPost1",
 			Handler:    _Query_ShowPost1_Handler,
+		},
+		{
+			MethodName: "ListPost1",
+			Handler:    _Query_ListPost1_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

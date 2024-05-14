@@ -42,6 +42,12 @@ service Query {
     option (google.api.http).get = "/dereview/dereview/show_post_1/{id}";
   
   }
+  
+  // Queries a list of ListPost1 items.
+  rpc ListPost1 (QueryListPost1Request) returns (QueryListPost1Response) {
+    option (google.api.http).get = "/dereview/dereview/list_post_1";
+  
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -84,5 +90,14 @@ message QueryShowPost1Request {
 
 message QueryShowPost1Response {
   Post1 post1 = 1;
+}
+
+message QueryListPost1Request {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryListPost1Response {
+  Post1                                  post1      = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
