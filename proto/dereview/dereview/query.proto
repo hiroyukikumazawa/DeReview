@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "dereview/dereview/params.proto";
 import "dereview/dereview/post.proto";
+import "dereview/dereview/post_1.proto";
 
 option go_package = "dereview/x/dereview/types";
 
@@ -33,6 +34,12 @@ service Query {
   }
   rpc ListPost (QueryAllPostRequest) returns (QueryAllPostResponse) {
     option (google.api.http).get = "/dereview/dereview/post";
+  
+  }
+  
+  // Queries a list of ShowPost1 items.
+  rpc ShowPost1 (QueryShowPost1Request) returns (QueryShowPost1Response) {
+    option (google.api.http).get = "/dereview/dereview/show_post_1/{id}";
   
   }
 }
@@ -69,5 +76,13 @@ message QueryAllPostRequest {
 message QueryAllPostResponse {
   repeated Post                                   Post       = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryShowPost1Request {
+  uint64 id = 1;
+}
+
+message QueryShowPost1Response {
+  Post1 post1 = 1;
 }
 
