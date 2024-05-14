@@ -21,6 +21,8 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Query_Params_FullMethodName        = "/dereview.dereview.Query/Params"
 	Query_HelloDereview_FullMethodName = "/dereview.dereview.Query/HelloDereview"
+	Query_GetPost_FullMethodName       = "/dereview.dereview.Query/GetPost"
+	Query_ListPost_FullMethodName      = "/dereview.dereview.Query/ListPost"
 )
 
 // QueryClient is the client API for Query service.
@@ -31,6 +33,9 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// Queries a list of HelloDereview items.
 	HelloDereview(ctx context.Context, in *QueryHelloDereviewRequest, opts ...grpc.CallOption) (*QueryHelloDereviewResponse, error)
+	// Queries a list of Post items.
+	GetPost(ctx context.Context, in *QueryGetPostRequest, opts ...grpc.CallOption) (*QueryGetPostResponse, error)
+	ListPost(ctx context.Context, in *QueryAllPostRequest, opts ...grpc.CallOption) (*QueryAllPostResponse, error)
 }
 
 type queryClient struct {
@@ -59,6 +64,24 @@ func (c *queryClient) HelloDereview(ctx context.Context, in *QueryHelloDereviewR
 	return out, nil
 }
 
+func (c *queryClient) GetPost(ctx context.Context, in *QueryGetPostRequest, opts ...grpc.CallOption) (*QueryGetPostResponse, error) {
+	out := new(QueryGetPostResponse)
+	err := c.cc.Invoke(ctx, Query_GetPost_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ListPost(ctx context.Context, in *QueryAllPostRequest, opts ...grpc.CallOption) (*QueryAllPostResponse, error) {
+	out := new(QueryAllPostResponse)
+	err := c.cc.Invoke(ctx, Query_ListPost_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -67,6 +90,9 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// Queries a list of HelloDereview items.
 	HelloDereview(context.Context, *QueryHelloDereviewRequest) (*QueryHelloDereviewResponse, error)
+	// Queries a list of Post items.
+	GetPost(context.Context, *QueryGetPostRequest) (*QueryGetPostResponse, error)
+	ListPost(context.Context, *QueryAllPostRequest) (*QueryAllPostResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -79,6 +105,12 @@ func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*Q
 }
 func (UnimplementedQueryServer) HelloDereview(context.Context, *QueryHelloDereviewRequest) (*QueryHelloDereviewResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HelloDereview not implemented")
+}
+func (UnimplementedQueryServer) GetPost(context.Context, *QueryGetPostRequest) (*QueryGetPostResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPost not implemented")
+}
+func (UnimplementedQueryServer) ListPost(context.Context, *QueryAllPostRequest) (*QueryAllPostResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPost not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -129,6 +161,42 @@ func _Query_HelloDereview_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_GetPost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetPostRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetPost(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_GetPost_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetPost(ctx, req.(*QueryGetPostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ListPost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAllPostRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListPost(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ListPost_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListPost(ctx, req.(*QueryAllPostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +211,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "HelloDereview",
 			Handler:    _Query_HelloDereview_Handler,
+		},
+		{
+			MethodName: "GetPost",
+			Handler:    _Query_GetPost_Handler,
+		},
+		{
+			MethodName: "ListPost",
+			Handler:    _Query_ListPost_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

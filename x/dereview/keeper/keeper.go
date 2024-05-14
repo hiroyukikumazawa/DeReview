@@ -23,8 +23,10 @@ type (
 		// Typically, this should be the x/gov module account.
 		authority string
 
-		Schema collections.Schema
-		Params collections.Item[types.Params]
+		Schema  collections.Schema
+		Params  collections.Item[types.Params]
+		PostSeq collections.Sequence
+		Post    collections.Map[uint64, types.Post]
 		// this line is used by starport scaffolding # collection/type
 
 	}
@@ -51,7 +53,9 @@ func NewKeeper(
 		authority:    authority,
 		logger:       logger,
 
-		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Params:  collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		PostSeq: collections.NewSequence(sb, types.PostCountKey, "post"),
+		Post:    collections.NewMap(sb, types.PostKey, "post_seq", collections.Uint64Key, codec.CollValue[types.Post](cdc)),
 		// this line is used by starport scaffolding # collection/instantiate
 	}
 
