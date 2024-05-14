@@ -17,6 +17,13 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod:      "HelloDereview",
+					Use:            "hello-dereview [name]",
+					Short:          "Query hello-dereview",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "name"}},
+				},
+
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

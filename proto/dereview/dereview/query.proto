@@ -1,4 +1,5 @@
 syntax = "proto3";
+
 package dereview.dereview;
 
 import "amino/amino.proto";
@@ -11,20 +12,34 @@ option go_package = "dereview/x/dereview/types";
 
 // Query defines the gRPC querier service.
 service Query {
+  
   // Parameters queries the parameters of the module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/dereview/dereview/params";
+  
+  }
+  
+  // Queries a list of HelloDereview items.
+  rpc HelloDereview (QueryHelloDereviewRequest) returns (QueryHelloDereviewResponse) {
+    option (google.api.http).get = "/dereview/dereview/hello_dereview/{name}";
+  
   }
 }
-
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
+  
   // params holds all the parameters of this module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Params params = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
 }
+
+message QueryHelloDereviewRequest {
+  string name = 1;
+}
+
+message QueryHelloDereviewResponse {
+  string name = 1;
+}
+
