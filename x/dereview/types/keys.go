@@ -20,3 +20,8 @@ var (
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
+
+var (
+	PostKey      = collections.NewPrefix("post/value/")
+	PostCountKey = collections.NewPrefix("post/count/")
+)

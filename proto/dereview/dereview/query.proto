@@ -7,6 +7,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "dereview/dereview/params.proto";
+import "dereview/dereview/post.proto";
 
 option go_package = "dereview/x/dereview/types";
 
@@ -22,6 +23,16 @@ service Query {
   // Queries a list of HelloDereview items.
   rpc HelloDereview (QueryHelloDereviewRequest) returns (QueryHelloDereviewResponse) {
     option (google.api.http).get = "/dereview/dereview/hello_dereview/{name}";
+  
+  }
+  
+  // Queries a list of Post items.
+  rpc GetPost  (QueryGetPostRequest) returns (QueryGetPostResponse) {
+    option (google.api.http).get = "/dereview/dereview/post/{id}";
+  
+  }
+  rpc ListPost (QueryAllPostRequest) returns (QueryAllPostResponse) {
+    option (google.api.http).get = "/dereview/dereview/post";
   
   }
 }
@@ -41,5 +52,22 @@ message QueryHelloDereviewRequest {
 
 message QueryHelloDereviewResponse {
   string name = 1;
+}
+
+message QueryGetPostRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPostResponse {
+  Post Post = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPostRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPostResponse {
+  repeated Post                                   Post       = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

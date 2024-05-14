@@ -1,0 +1,11 @@
+syntax = "proto3";
+package dereview.dereview;
+
+option go_package = "dereview/x/dereview/types";
+
+message Post {
+  uint64 id = 1;
+  string title = 2; 
+  string body = 3; 
+  string creator = 4;
+}

@@ -1,17 +1,20 @@
 syntax = "proto3";
+
 package dereview.dereview;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "dereview/dereview/params.proto";
+import "dereview/dereview/post.proto";
 
 option go_package = "dereview/x/dereview/types";
 
 // GenesisState defines the dereview module's genesis state.
 message GenesisState {
+  
   // params defines all the parameters of the module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+           Params params    = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+  repeated Post   postList  = 2 [(gogoproto.nullable) = false] ;
+           uint64 postCount = 3;
 }
+

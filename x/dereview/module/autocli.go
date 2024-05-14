@@ -24,6 +24,18 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "name"}},
 				},
 
+				{
+					RpcMethod: "ListPost",
+					Use:       "list-post",
+					Short:     "List all post",
+				},
+				{
+					RpcMethod:      "GetPost",
+					Use:            "get-post [id]",
+					Short:          "Gets a post by id",
+					Alias:          []string{"show-post"},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
@@ -34,6 +46,24 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
+				},
+				{
+					RpcMethod:      "CreatePost",
+					Use:            "create-post [title] [body]",
+					Short:          "Create post",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "title"}, {ProtoField: "body"}},
+				},
+				{
+					RpcMethod:      "UpdatePost",
+					Use:            "update-post [id] [title] [body]",
+					Short:          "Update post",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}, {ProtoField: "title"}, {ProtoField: "body"}},
+				},
+				{
+					RpcMethod:      "DeletePost",
+					Use:            "delete-post [id]",
+					Short:          "Delete post",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
