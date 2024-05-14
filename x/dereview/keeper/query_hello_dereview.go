@@ -2,9 +2,11 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	"dereview/x/dereview/types"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -14,7 +16,10 @@ func (q queryServer) HelloDereview(ctx context.Context, req *types.QueryHelloDer
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	// TODO: Process the query
+	// Validation and Context unwrapping
+	ctx = sdk.UnwrapSDKContext(ctx)
+	_ = ctx
 
-	return &types.QueryHelloDereviewResponse{}, nil
+	// Custom Response
+	return &types.QueryHelloDereviewResponse{Name: fmt.Sprintf("Welcom to DeReview, %s!", req.Name)}, nil
 }
