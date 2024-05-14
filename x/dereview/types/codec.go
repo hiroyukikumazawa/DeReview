@@ -13,6 +13,9 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgUpdatePost{},
 		&MsgDeletePost{},
 	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgCreatePost1{},
+	)
 	// this line is used by starport scaffolding # 3
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
